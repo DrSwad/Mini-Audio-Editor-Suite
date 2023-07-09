@@ -2,7 +2,7 @@
 #include "audio/AudioBuffer.h"
 
 int main() {
-  std::cout << "Mini Audio Effects Suite" << std::endl;
+  std::cout << "Mini Audio Editor Suite" << std::endl;
   std::cout << "==========================" << std::endl;
 
   AudioBuffer buffer(44100, 2);

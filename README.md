@@ -29,7 +29,7 @@ make
 ### Running
 
 ```bash
-./MiniAudioEffectsSuite
+./MiniAudioEditorSuite
 ```
 
 ### Testing
@@ -43,5 +43,5 @@ cd build
 Run the main application:
 ```bash
 cd build
-./MiniAudioEffectsSuite
+./MiniAudioEditorSuite
 ``` 
