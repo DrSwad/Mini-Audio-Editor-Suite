@@ -1,0 +1,40 @@
+cmake_minimum_required(VERSION 3.16)
+project(MiniAudioEffectsSuite VERSION 1.0.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Find SDL2
+find_package(SDL2 REQUIRED)
+
+# Include directories
+include_directories(${SDL2_INCLUDE_DIRS})
+
+# Source files
+set(SOURCES
+    src/main.cpp
+    src/audio/AudioBuffer.cpp
+)
+
+# Header files
+set(HEADERS
+    include/audio/AudioBuffer.h
+)
+
+# Create executable
+add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+
+# Link libraries
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
+
+# Include directories for headers
+target_include_directories(${PROJECT_NAME} PRIVATE include)
+
+# Compiler flags
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
+endif()
+
+# Enable testing
+enable_testing()
+add_subdirectory(tests) 
