@@ -14,11 +14,14 @@ include_directories(${SDL2_INCLUDE_DIRS})
 set(SOURCES
     src/main.cpp
     src/audio/AudioBuffer.cpp
+    src/audio/GainEffect.cpp
 )
 
 # Header files
 set(HEADERS
     include/audio/AudioBuffer.h
+    include/audio/AudioEffect.h
+    include/audio/GainEffect.h
 )
 
 # Create executable

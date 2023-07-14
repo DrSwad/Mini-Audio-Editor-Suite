@@ -2,7 +2,9 @@
 add_executable(UnitTests
     test_main.cpp
     test_audio_buffer.cpp
+    test_gain_effect.cpp
     ../src/audio/AudioBuffer.cpp
+    ../src/audio/GainEffect.cpp
 )
 
 target_include_directories(UnitTests PRIVATE ../include)
