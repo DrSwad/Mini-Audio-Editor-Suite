@@ -15,6 +15,7 @@ set(SOURCES
     src/main.cpp
     src/audio/AudioBuffer.cpp
     src/audio/GainEffect.cpp
+    src/ui/Window.cpp
 )
 
 # Header files
@@ -22,6 +23,7 @@ set(HEADERS
     include/audio/AudioBuffer.h
     include/audio/AudioEffect.h
     include/audio/GainEffect.h
+    include/ui/Window.h
 )
 
 # Create executable

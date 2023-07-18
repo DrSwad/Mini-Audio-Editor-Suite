@@ -1,6 +1,7 @@
 #include <iostream>
 #include "audio/AudioBuffer.h"
 #include "audio/GainEffect.h"
+#include "ui/Window.h"
 
 int main() {
   std::cout << "Mini Audio Editor Suite" << std::endl;
@@ -25,6 +26,28 @@ int main() {
   gainEffect.process(buffer);
   std::cout << "Applied gain effect. Sample at frame 50, channel 0: "
             << buffer.getSample(50, 0) << std::endl;
+
+  Window window("Mini Audio Editor Suite", 1024, 768);
+
+  if (window.initialize()) {
+    std::cout << "Window created successfully:" << std::endl;
+    std::cout << "  Width: " << window.getWidth() << std::endl;
+    std::cout << "  Height: " << window.getHeight() << std::endl;
+
+    window.clear();
+    SDL_SetRenderDrawColor(window.getRenderer(), 255, 0, 0, 255);
+    SDL_Rect rect = { 100, 100, 200, 150 };
+    SDL_RenderFillRect(window.getRenderer(), &rect);
+    window.present();
+
+    std::cout << "Rendered a red rectangle. Window will close in 2 seconds..." << std::endl;
+    SDL_Delay(2000);
+
+    window.close();
+  }
+  else {
+    std::cout << "Failed to create window!" << std::endl;
+  }
 
   return 0;
 }

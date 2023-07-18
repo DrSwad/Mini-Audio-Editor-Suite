@@ -13,6 +13,12 @@ void testGainEffectProcessing();
 void testGainEffectDisabled();
 void testGainEffectSetGain();
 
+void testWindowConstruction();
+void testWindowInitialization();
+void testWindowRendering();
+void testWindowEventHandling();
+void testWindowTitle();
+
 int main() {
   std::cout << "Running all unit tests..." << std::endl;
   std::cout << "=========================" << std::endl;
@@ -29,6 +35,12 @@ int main() {
   testGainEffectProcessing();
   testGainEffectDisabled();
   testGainEffectSetGain();
+
+  testWindowConstruction();
+  testWindowInitialization();
+  testWindowRendering();
+  testWindowEventHandling();
+  testWindowTitle();
 
   std::cout << "=========================" << std::endl;
   std::cout << "All tests passed!" << std::endl;
