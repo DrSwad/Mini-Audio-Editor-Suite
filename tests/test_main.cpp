@@ -19,6 +19,14 @@ void testWindowRendering();
 void testWindowEventHandling();
 void testWindowTitle();
 
+void testWaveformViewConstruction();
+void testWaveformViewPosition();
+void testWaveformViewSize();
+void testWaveformViewColor();
+void testWaveformViewZoom();
+void testWaveformViewAudioBuffer();
+void testWaveformViewEmptyBuffer();
+
 int main() {
   std::cout << "Running all unit tests..." << std::endl;
   std::cout << "=========================" << std::endl;
@@ -41,6 +49,14 @@ int main() {
   testWindowRendering();
   testWindowEventHandling();
   testWindowTitle();
+
+  testWaveformViewConstruction();
+  testWaveformViewPosition();
+  testWaveformViewSize();
+  testWaveformViewColor();
+  testWaveformViewZoom();
+  testWaveformViewAudioBuffer();
+  testWaveformViewEmptyBuffer();
 
   std::cout << "=========================" << std::endl;
   std::cout << "All tests passed!" << std::endl;

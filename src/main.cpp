@@ -2,6 +2,7 @@
 #include "audio/AudioBuffer.h"
 #include "audio/GainEffect.h"
 #include "ui/Window.h"
+#include "ui/WaveformView.h"
 
 int main() {
   std::cout << "Mini Audio Editor Suite" << std::endl;
@@ -34,14 +35,18 @@ int main() {
     std::cout << "  Width: " << window.getWidth() << std::endl;
     std::cout << "  Height: " << window.getHeight() << std::endl;
 
+    WaveformView waveform(50, 100, 400, 200);
+    waveform.setAudioBuffer(buffer);
+    waveform.setColor(0, 255, 0, 255);
+
+    std::cout << "Created waveform view with audio data" << std::endl;
+
     window.clear();
-    SDL_SetRenderDrawColor(window.getRenderer(), 255, 0, 0, 255);
-    SDL_Rect rect = { 100, 100, 200, 150 };
-    SDL_RenderFillRect(window.getRenderer(), &rect);
+    waveform.render(window.getRenderer());
     window.present();
 
-    std::cout << "Rendered a red rectangle. Window will close in 2 seconds..." << std::endl;
-    SDL_Delay(2000);
+    std::cout << "Rendered waveform visualization. Window will close in 3 seconds..." << std::endl;
+    SDL_Delay(3000);
 
     window.close();
   }
