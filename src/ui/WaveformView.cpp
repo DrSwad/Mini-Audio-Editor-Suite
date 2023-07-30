@@ -13,7 +13,7 @@ void WaveformView::setAudioBuffer(const AudioBuffer& buffer) {
 }
 
 void WaveformView::render(SDL_Renderer* renderer) {
-  if (!audioBuffer_ || audioBuffer_->getFrameCount() == 0) {
+  if (!renderer || !audioBuffer_ || audioBuffer_->getFrameCount() == 0) {
     return;
   }
 

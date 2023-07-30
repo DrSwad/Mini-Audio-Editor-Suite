@@ -17,6 +17,7 @@ set(SOURCES
     src/audio/GainEffect.cpp
     src/ui/Window.cpp
     src/ui/WaveformView.cpp
+    src/ui/Application.cpp
 )
 
 # Header files
@@ -26,6 +27,7 @@ set(HEADERS
     include/audio/GainEffect.h
     include/ui/Window.h
     include/ui/WaveformView.h
+    include/ui/Application.h
 )
 
 # Create executable
