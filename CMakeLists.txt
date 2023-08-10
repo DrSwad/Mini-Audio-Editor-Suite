@@ -15,6 +15,8 @@ set(SOURCES
     src/main.cpp
     src/audio/AudioBuffer.cpp
     src/audio/GainEffect.cpp
+    src/audio/AudioPlayer.cpp
+    src/audio/AudioFileLoader.cpp
     src/ui/Window.cpp
     src/ui/WaveformView.cpp
     src/ui/Application.cpp
@@ -25,6 +27,8 @@ set(HEADERS
     include/audio/AudioBuffer.h
     include/audio/AudioEffect.h
     include/audio/GainEffect.h
+    include/audio/AudioPlayer.h
+    include/audio/AudioFileLoader.h
     include/ui/Window.h
     include/ui/WaveformView.h
     include/ui/Application.h

@@ -4,6 +4,8 @@
 #include "WaveformView.h"
 #include "audio/AudioBuffer.h"
 #include "audio/GainEffect.h"
+#include "audio/AudioPlayer.h"
+#include "audio/AudioFileLoader.h"
 #include <memory>
 
 class Application {
@@ -16,7 +18,10 @@ public:
   void shutdown();
 
   void loadTestAudio();
+  void loadAudioFile(const std::string& filename);
   void applyGainEffect(float gain);
+  void togglePlayback();
+  void stopPlayback();
 
   void handleEvents();
   void update();
@@ -30,10 +35,13 @@ private:
   std::unique_ptr<WaveformView> waveformView_;
   std::unique_ptr<AudioBuffer> audioBuffer_;
   std::unique_ptr<GainEffect> gainEffect_;
+  std::unique_ptr<AudioPlayer> audioPlayer_;
+  std::unique_ptr<AudioFileLoader> fileLoader_;
 
   bool running_;
   bool audioLoaded_;
 
   float currentGain_;
   bool showWaveform_;
+  bool audioPlaying_;
 };

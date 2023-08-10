@@ -1,9 +1,10 @@
 #include "ui/Application.h"
 #include <iostream>
 #include <cmath>
+#include <filesystem>
 
 Application::Application()
-  : running_(false), audioLoaded_(false), currentGain_(1.0f), showWaveform_(true) {}
+  : running_(false), audioLoaded_(false), currentGain_(1.0f), showWaveform_(true), audioPlaying_(false) {}
 
 Application::~Application() {
   shutdown();
@@ -22,6 +23,13 @@ bool Application::initialize() {
 
   audioBuffer_ = std::make_unique<AudioBuffer>(44100, 2);
   gainEffect_ = std::make_unique<GainEffect>(currentGain_);
+  audioPlayer_ = std::make_unique<AudioPlayer>();
+  fileLoader_ = std::make_unique<AudioFileLoader>();
+
+  if (!audioPlayer_->initialize()) {
+    std::cerr << "Failed to initialize audio player" << std::endl;
+    return false;
+  }
 
   loadTestAudio();
 
@@ -38,6 +46,9 @@ void Application::run() {
   std::cout << "  ESC - Quit" << std::endl;
   std::cout << "  +/- - Adjust gain" << std::endl;
   std::cout << "  W - Toggle waveform" << std::endl;
+  std::cout << "  SPACE - Play/Pause audio" << std::endl;
+  std::cout << "  S - Stop audio" << std::endl;
+  std::cout << "  L - Load WAV file (if available)" << std::endl;
 
   while (running_) {
     handleEvents();
@@ -84,6 +95,31 @@ void Application::loadTestAudio() {
   std::cout << "Loaded test audio: 1 second sine wave at 440Hz" << std::endl;
 }
 
+void Application::loadAudioFile(const std::string& filename) {
+  if (!fileLoader_ || !audioBuffer_) return;
+
+  if (!fileLoader_->canLoadFile(filename)) {
+    std::cout << "Cannot load file: " << filename << " (not a valid WAV file)" << std::endl;
+    return;
+  }
+
+  if (fileLoader_->loadWavFile(filename, *audioBuffer_)) {
+    audioLoaded_ = true;
+    waveformView_->setAudioBuffer(*audioBuffer_);
+
+    // Stop any current playback
+    if (audioPlaying_) {
+      audioPlayer_->stop();
+      audioPlaying_ = false;
+    }
+
+    std::cout << "Audio file loaded successfully" << std::endl;
+  }
+  else {
+    std::cout << "Failed to load audio file: " << filename << std::endl;
+  }
+}
+
 void Application::applyGainEffect(float gain) {
   if (!gainEffect_ || !audioBuffer_ || !waveformView_) return;
 
@@ -96,7 +132,39 @@ void Application::applyGainEffect(float gain) {
   // Update waveform with the modified audio buffer
   waveformView_->setAudioBuffer(*audioBuffer_);
 
+  if (audioPlayer_) {
+    audioPlayer_->setVolume(gain);
+  }
+
   std::cout << "Applied gain: " << gain << std::endl;
+}
+
+void Application::togglePlayback() {
+  if (!audioPlayer_ || !audioBuffer_ || !audioLoaded_) return;
+
+  if (audioPlaying_) {
+    if (audioPlayer_->isPaused()) {
+      audioPlayer_->resume();
+      std::cout << "Audio resumed" << std::endl;
+    }
+    else {
+      audioPlayer_->pause();
+      std::cout << "Audio paused" << std::endl;
+    }
+  }
+  else {
+    audioPlayer_->play(*audioBuffer_);
+    audioPlaying_ = true;
+    std::cout << "Audio started" << std::endl;
+  }
+}
+
+void Application::stopPlayback() {
+  if (!audioPlayer_) return;
+
+  audioPlayer_->stop();
+  audioPlaying_ = false;
+  std::cout << "Audio stopped" << std::endl;
 }
 
 void Application::handleEvents() {
@@ -134,6 +202,28 @@ void Application::handleEvents() {
             std::cout << "Waveform display: " << (showWaveform_ ? "ON" : "OFF") << std::endl;
             break;
           }
+
+          case SDLK_SPACE: {
+            togglePlayback();
+            break;
+          }
+
+          case SDLK_s: {
+            stopPlayback();
+            break;
+          }
+
+          case SDLK_l: {
+            if (std::filesystem::exists("sample.wav")) {
+              std::cout << "Loading sample.wav file..." << std::endl;
+              loadAudioFile("sample.wav");
+              std::cout << "File loading completed." << std::endl;
+            }
+            else {
+              std::cout << "No sample.wav file found. Create a WAV file named 'sample.wav' to test file loading." << std::endl;
+            }
+            break;
+          }
         }
         break;
       }
@@ -155,7 +245,6 @@ void Application::render() {
 
   SDL_SetRenderDrawColor(window_->getRenderer(), 255, 255, 255, 255);
 
-  // Draw a simple border around the waveform
   if (showWaveform_) {
     SDL_Rect border = { 45, 95, 810, 310 };
     SDL_RenderDrawRect(window_->getRenderer(), &border);
